@@ -11,12 +11,12 @@ from tqdm import tqdm
 FILE = Path(__file__).absolute()
 sys.path.append(FILE.parents[0].as_posix())  # add kapao/ to path
 
-from models.experimental import attempt_load
-from utils.datasets import create_dataloader
-from utils.augmentations import letterbox
-from utils.general import check_dataset, check_file, check_img_size, \
+from sco.kapao.models.experimental import attempt_load
+from sco.kapao.utils.datasets import create_dataloader
+from sco.kapao.utils.augmentations import letterbox
+from sco.kapao.utils.general import check_dataset, check_file, check_img_size, \
     non_max_suppression_kp, scale_coords, set_logging, colorstr
-from utils.torch_utils import select_device, time_sync
+from sco.kapao.utils.torch_utils import select_device, time_sync
 import tempfile
 import cv2
 
@@ -105,7 +105,7 @@ def post_process_batch(data, imgs, paths, shapes, person_dets, kp_dets,
                     poses_mask = poses[mask]
 
                     if len(poses_mask):
-                        kpd[:, :4] = scale_coords(imgs[si].shape[1:], kpd[:, :4], shape)
+                        kpd[:, :4] = scale_coords(imgs[si].shape[1:], kpd[:, :4].clone(), shape)
                         kpd = kpd[:, :6].cpu()
 
                         for x1, y1, x2, y2, conf, cls in kpd:
